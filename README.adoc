@@ -1215,6 +1215,26 @@ arities N > K provide a fold of the K arity over varargs.
   ([w x y z & more] (reduce foo (foo w (foo x (foo y z))) more)))
 ----
 
+In cases where the function has to call itself, the recursive call should be the first form in the body.
+
+[source,clojure]
+----
+;; good
+(defn show
+  ([el s]
+    (set-display el s))
+  ([el]
+    (show el "block")))
+
+;; bad
+(defn show
+  ([el]
+    (show el "block"))
+  ([el s]
+    (set-display el s)))
+----
+
+
 === Function Length [[function-length]]
 
 Avoid functions longer than 10 LOC (lines of code). Ideally, most
